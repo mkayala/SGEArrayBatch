@@ -1,0 +1,17 @@
+# SGEArrayBatch
+# 
+# Modified from:
+# sge.py
+#
+# Creative Commons Attribution License
+# http://creativecommons.org/licenses/by/2.5/
+#
+# Trevor Strohman
+#    First release: December 2005
+#    Modified from version:  11 January 2006
+#
+# Bug finders: Fernando Diaz
+
+# Version history after December 2011 can be found at:
+# https://github.com/mkayala/SGEArrayBatch
+
