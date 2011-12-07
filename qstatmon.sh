@@ -1,8 +1,9 @@
 #!/bin/bash
-# Matt Kayala 2011
-# Simple script to wait until all jobs are complete.
-# 
-# If qstat is not available will exit 100 immediately.
+# Mkayala 2011
+# Simple script to wait until all jobs sent in are complete.
+# Assumes we are on a submit host (so qstat works!)
+# Uses xml version of qstat output to ensure full jobnames
+# are written out
 
 usage="Usage: `basename $0` jobname1 [jobname2 ...]"
 
@@ -18,7 +19,9 @@ do
     cmd="$cmd -e $job"
 done
 
-res=`qstat | $cmd`
+echo "Going to run this command: qstat -xml | $cmd"
+
+res=`qstat -xml | $cmd`
 if [ $? -ne 0 ]
 then
     exit 100
@@ -27,7 +30,7 @@ fi
 while [ $res -gt 0 ]
 do
     sleep 10
-    res=`qstat | $cmd`
+    res=`qstat -xml | $cmd`
 done
 
 exit 0
