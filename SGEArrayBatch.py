@@ -23,12 +23,17 @@ import time
 class Job:
     """The basic structure of a single Grid Engine Job. 
     """
-    def __init__(self, name, command, queue, memfree):
+    def __init__(self, name, command, queue, memfree,
+                 priority=None, project=None, rsc_reqs=[]):
         self.name = name
         self.queue = queue
         self.memfree = memfree
         self.command = command
         self.script = command
+        self.priority = priority
+        self.project = project
+        self.rsc_reqs = rsc_reqs
+        
         self.dependencies = []
         self.submitted = 0
         
@@ -40,7 +45,8 @@ class JobGroup:
     
     The arguments dictionary specifies variables to change for each job task.
     """   
-    def __init__(self, name, command, queue, memfree, arguments={}):
+    def __init__(self, name, command, queue, memfree, arguments={},
+                 priority=None, project=None, rsc_reqs=[]):
         self.name = name
         self.queue = queue
         self.memfree = memfree
@@ -48,6 +54,10 @@ class JobGroup:
         self.dependencies = []
         self.submitted = 0
         self.arguments = arguments
+        self.priority = priority
+        self.project = project
+        self.rsc_reqs = rsc_reqs
+        
         self.generateScript()
         
     def generateScript(self):
@@ -169,6 +179,13 @@ def submit_safe_jobs(directory, jobs, arch=None, extraargs=None):
             for dep in job.dependencies:
                 args += dep.name + ","
             args = args[:-1]
+
+        if job.priority is not None:
+            args += "-p %d " % job.priority
+        if job.project is not None:
+            args += "-P %s " % job.project
+        for rsc in job.rsc_reqs:
+            args += '-l "%s" ' % rsc
                   
         qsubcmd = ("qsub %s %s" % (args, job.scriptPath)) 
         print qsubcmd
