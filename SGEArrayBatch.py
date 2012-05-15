@@ -181,11 +181,11 @@ def submit_safe_jobs(directory, jobs, arch=None, extraargs=None):
             args = args[:-1]
 
         if job.priority is not None:
-            args += "-p %d " % job.priority
+            args += " -p %d " % job.priority
         if job.project is not None:
-            args += "-P %s " % job.project
+            args += " -P %s " % job.project
         for rsc in job.rsc_reqs:
-            args += '-l "%s" ' % rsc
+            args += ' -l "%s" ' % rsc
                   
         qsubcmd = ("qsub %s %s" % (args, job.scriptPath)) 
         print qsubcmd
